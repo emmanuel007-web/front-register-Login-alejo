@@ -13,7 +13,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class Login {
 
   // ── Campos ──
-  username = '';
+  email    = '';
   password = '';
 
   // ── UI ──
@@ -30,8 +30,12 @@ export class Login {
   doLogin(): void {
     this.errorMsg = '';
 
-    if (!this.username.trim()) {
-      this.errorMsg = 'El nombre de usuario es requerido.';
+    if (!this.email.trim()) {
+      this.errorMsg = 'El correo electrónico es requerido.';
+      return;
+    }
+    if (!this.email.includes('@')) {
+      this.errorMsg = 'Ingresa un correo electrónico válido.';
       return;
     }
     if (!this.password) {
@@ -41,16 +45,19 @@ export class Login {
 
     this.loading = true;
 
-    this.authService.login({ username: this.username, password: this.password })
+    this.authService.login({ email: this.email, password: this.password })
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.loading = false;
+          this.authService.saveSession(res);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           this.loading = false;
           if (err.status === 401) {
-            this.errorMsg = 'Usuario o contraseña incorrectos.';
+            this.errorMsg = 'Correo o contraseña incorrectos.';
+          } else if (err.status === 400) {
+            this.errorMsg = 'Datos inválidos. Verifica tu correo y contraseña.';
           } else if (err.status === 0) {
             this.errorMsg = 'No se pudo conectar con el servidor.';
           } else {

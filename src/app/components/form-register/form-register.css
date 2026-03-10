@@ -1,3 +1,20 @@
+/* ── Variables de diseño (compartidas con home) ── */
+:host {
+  --color-bg:        #050a14;
+  --color-surface:   rgba(255, 255, 255, 0.03);
+  --color-border:    rgba(255, 255, 255, 0.08);
+  --color-primary:   #8b5cf6;
+  --color-primary-h: #a78bfa;
+  --color-primary-d: #7c3aed;
+  --color-text:      #f1f5f9;
+  --color-muted:     rgba(148, 163, 184, 0.8);
+  --color-subtle:    rgba(100, 116, 139, 0.6);
+  --font-mono:       'Space Mono', monospace;
+  --font-sans:       'DM Sans', sans-serif;
+  --radius:          12px;
+  --transition:      0.25s ease;
+}
+
 /* ── Wrapper ── */
 .register-wrapper {
   position: relative;
@@ -8,7 +25,7 @@
   justify-content: center;
   background: var(--color-bg);
   font-family: var(--font-sans);
-  /* padding: 32px 16px; */
+  padding: 32px 16px;
   overflow-x: hidden;
 }
 
@@ -463,4 +480,90 @@ input:focus {
     width: calc(100vw - 32px);
     padding: 36px 28px 30px;
   }
+}
+
+/* ── Top row: marca + volver ── */
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+/* sobrescribe el margin-bottom del .brand standalone */
+.card-top .brand {
+  margin-bottom: 0;
+}
+
+/* ── Botón volver a home ── */
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 400;
+  color: rgba(148, 163, 184, 0.6);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  transition: color var(--transition), border-color var(--transition),
+              background var(--transition), transform var(--transition);
+}
+
+.home-link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--transition);
+}
+
+.home-link:hover {
+  color: var(--color-primary-h);
+  border-color: rgba(167, 139, 250, 0.3);
+  background: rgba(139, 92, 246, 0.07);
+  transform: translateY(-1px);
+}
+
+.home-link:hover svg {
+  transform: translateX(-3px);
+}
+
+/* ── Requisitos de contraseña ── */
+.pwd-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  margin-top: -4px;
+}
+
+.pwd-rules span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: rgba(100, 116, 139, 0.6);
+  transition: color 0.2s;
+}
+
+.pwd-rules span svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.pwd-rules span.rule-ok {
+  color: #22c55e;
+}
+
+.pwd-rules span.rule-ok svg {
+  opacity: 1;
+  stroke: #22c55e;
 }

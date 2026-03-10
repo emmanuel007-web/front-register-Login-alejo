@@ -11,8 +11,8 @@
   <!-- Tarjeta -->
   <div class="login-card">
 
-    <!-- Marca + volver -->
-    <div class="card-top">
+    <!-- Marca -->
+<div class="card-top">
       <div class="brand">
         <div class="brand-icon">
           <svg viewBox="0 0 40 40" fill="none">
@@ -31,7 +31,6 @@
         <span>Home</span>
       </a>
     </div>
-
     <!-- Encabezado -->
     <div class="card-header">
       <h1>Bienvenido</h1>
@@ -53,21 +52,21 @@
     <!-- Formulario -->
     <div class="login-form">
 
-      <div class="field-group" [class.focused]="focused === 'user'">
-        <label for="username">Usuario</label>
+      <div class="field-group" [class.focused]="focused === 'email'">
+        <label for="email">Correo electrónico</label>
         <div class="input-wrapper">
           <span class="input-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <circle cx="12" cy="8" r="4"/>
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m2 7 10 7 10-7"/>
             </svg>
           </span>
           <input
-            id="username"
-            type="text"
-            placeholder="nombre de usuario"
-            [(ngModel)]="username"
-            (focus)="focused = 'user'"
+            id="email"
+            type="email"
+            placeholder="tu@correo.com"
+            [(ngModel)]="email"
+            (focus)="focused = 'email'"
             (blur)="focused = ''"
           />
         </div>

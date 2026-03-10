@@ -12,17 +12,14 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class FormRegister {
 
-  // ── Estado de pasos ──
-  step = 1;
-
   // ── Campos ──
-  fullname = '';
-  email    = '';
   username = '';
+  email    = '';
   password = '';
   confirm  = '';
 
   // ── UI ──
+  step     = 1;
   focused  = '';
   showPwd  = false;
   showConf = false;
@@ -44,18 +41,33 @@ export class FormRegister {
   ) {}
 
   // ─────────────────────────────────────────
+  // Validación de contraseña (reglas del backend)
+  // Mínimo 8 chars, 1 mayúscula, 1 minúscula, 1 número, 1 especial (@$!%*?&)
+  // ─────────────────────────────────────────
+
+  private passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+  isPasswordValid(): boolean {
+    return this.passwordRegex.test(this.password);
+  }
+
+  // ─────────────────────────────────────────
   // Navegación entre pasos
   // ─────────────────────────────────────────
 
   goStep2(): void {
     this.errorMsg = '';
 
-    if (!this.fullname.trim()) {
-      this.errorMsg = 'El nombre completo es requerido.';
+    if (!this.email.trim()) {
+      this.errorMsg = 'El correo electrónico es requerido.';
       return;
     }
     if (!this.email.includes('@')) {
       this.errorMsg = 'Ingresa un correo electrónico válido.';
+      return;
+    }
+    if (!this.username.trim()) {
+      this.errorMsg = 'El nombre de usuario es requerido.';
       return;
     }
 
@@ -76,10 +88,10 @@ export class FormRegister {
     const p = this.password;
     let score = 0;
 
-    if (p.length >= 8)           score++;
-    if (/[A-Z]/.test(p))         score++;
-    if (/[0-9]/.test(p))         score++;
-    if (/[^A-Za-z0-9]/.test(p))  score++;
+    if (p.length >= 8)              score++;
+    if (/[A-Z]/.test(p))            score++;
+    if (/[0-9]/.test(p))            score++;
+    if (/[^A-Za-z0-9]/.test(p))     score++;
 
     const labels = ['', 'Débil', 'Regular', 'Buena', 'Fuerte'];
     const colors = ['', '#ef4444', '#f97316', '#eab308', '#22c55e'];
@@ -104,12 +116,8 @@ export class FormRegister {
   doSubmit(): void {
     this.errorMsg = '';
 
-    if (!this.username.trim()) {
-      this.errorMsg = 'El nombre de usuario es requerido.';
-      return;
-    }
-    if (this.password.length < 8) {
-      this.errorMsg = 'La contraseña debe tener al menos 8 caracteres.';
+    if (!this.isPasswordValid()) {
+      this.errorMsg = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&).';
       return;
     }
     if (this.password !== this.confirm) {
@@ -120,20 +128,22 @@ export class FormRegister {
     this.loading = true;
 
     this.authService.register({
-      fullname: this.fullname,
-      email:    this.email,
       username: this.username,
+      email:    this.email,
       password: this.password
     }).subscribe({
-      next: () => {
+      next: (res) => {
         this.loading = false;
         this.success = true;
-        setTimeout(() => this.router.navigate(['/login']), 1500);
+        this.authService.saveSession(res);
+        setTimeout(() => this.router.navigate(['/home']), 1500);
       },
       error: (err) => {
         this.loading = false;
         if (err.status === 409) {
-          this.errorMsg = 'El usuario o correo ya está registrado.';
+          this.errorMsg = 'El correo ya está registrado.';
+        } else if (err.status === 400) {
+          this.errorMsg = 'Datos inválidos. Revisa los campos e intenta de nuevo.';
         } else if (err.status === 0) {
           this.errorMsg = 'No se pudo conectar con el servidor.';
         } else {
