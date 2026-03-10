@@ -136,7 +136,7 @@ export class FormRegister {
         this.loading = false;
         this.success = true;
         this.authService.saveSession(res);
-        setTimeout(() => this.router.navigate(['/home']), 1500);
+        setTimeout(() => this.router.navigate(['/']), 1500);
       },
       error: (err) => {
         this.loading = false;

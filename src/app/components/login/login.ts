@@ -50,7 +50,7 @@ export class Login {
         next: (res) => {
           this.loading = false;
           this.authService.saveSession(res);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/']);
         },
         error: (err) => {
           this.loading = false;

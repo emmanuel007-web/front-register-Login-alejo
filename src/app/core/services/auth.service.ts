@@ -24,16 +24,16 @@ export interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private api = environment.apiUrl;
+  private api = environment.authUrl;
 
   constructor(private http: HttpClient) {}
 
   login(data: LoginRequest) {
-    return this.http.post<AuthResponse>(`${this.api}/auth/login`, data);
+    return this.http.post<AuthResponse>(`${this.api}/login`, data);
   }
 
   register(data: RegisterRequest) {
-    return this.http.post<AuthResponse>(`${this.api}/auth/register`, data);
+    return this.http.post<AuthResponse>(`${this.api}/register`, data);
   }
 
   // Guarda el token en localStorage para usarlo en peticiones futuras
